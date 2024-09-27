@@ -1,0 +1,16 @@
+FROM cimg/ruby:3.2.2-node
+
+# Set working directory
+WORKDIR /app/backend
+
+# Copy Gemfile and Gemfile.lock
+COPY --chown=circleci:circleci Gemfile Gemfile.lock ./
+
+# Switch to circleci user (already the default)
+USER circleci
+
+# Install dependencies as circleci user
+RUN bundle install
+
+# Copy the rest of your application code
+COPY --chown=circleci:circleci . .

@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: backend_${RAILS_ENV:-development}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: backend_image
+    environment:
+      RAILS_ENV: ${RAILS_ENV:-development}
+      DATABASE_URL: "postgres://postgres:${POSTGRES_PASSWORD}@db:5432/backend_${RAILS_ENV:-development}"
+    volumes:
+      - ./backend:/app/backend
+    working_dir: /app/backend  # Align with WORKDIR in Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      bash -c '
+        rm -f /app/backend/tmp/pids/server.pid &&
+        bundle exec rails db:prepare &&
+        bundle exec rails s -b 0.0.0.0 -p 3000
+      '
+
+  rspec:
+    image: backend_image
+    environment:
+      RAILS_ENV: test
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_URL: "postgres://postgres:${POSTGRES_PASSWORD}@db:5432/backend_test"
+    volumes:
+      - bundle_data:/usr/local/bundle
+    working_dir: /app/backend
+    depends_on:
+      db:
+        condition: service_healthy
+    user: "circleci"
+    command: >
+      bash -c '
+        ls -l ./wait-for-it.sh;
+        ./wait-for-it.sh db:5432 -- bundle exec rails db:drop db:create db:migrate &&
+        bundle exec rspec
+      '
+
+volumes:
+  postgres_data:
+  bundle_data:
