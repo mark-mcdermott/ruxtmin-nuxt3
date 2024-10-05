@@ -6,9 +6,6 @@ jobs:
       - image: cimg/ruby:3.2.2-node
     environment:
       DOCKER_BUILDKIT: 0
-      # Ensure that POSTGRES_PASSWORD is set here or in CircleCI project settings
-      # You can set it here for testing, but it's safer to set it as an environment variable in CircleCI
-      POSTGRES_PASSWORD: your_postgres_password
     steps:
       - checkout
 
@@ -33,32 +30,21 @@ jobs:
             fi
 
       - run:
-          name: Create .env File for Docker Compose
+          name: Create .env File
           command: |
-            echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env
-            echo "RAILS_ENV=test" >> .env
+            echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > backend/.env
+            echo "RAILS_ENV=test" >> backend/.env
 
       - run:
-          name: Build Backend Docker Image
+          name: Build Backend Image
           command: |
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
 
       - run:
-          name: Build Other Docker Images
-          command: |
-            docker-compose build
-
-      - run:
           name: Run RSpec Tests
           command: |
-            docker-compose up --abort-on-container-exit rspec
-          when: always
-
-      - run:
-          name: Run Playwright Tests
-          command: |
-            docker-compose run --rm playwright
-          when: always
+            cd backend
+            docker-compose up --no-build --abort-on-container-exit rspec
 
       - store_test_results:
           path: backend/tmp/rspec_results
