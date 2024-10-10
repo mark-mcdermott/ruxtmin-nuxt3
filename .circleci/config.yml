@@ -95,9 +95,9 @@ jobs:
           command: cat backend/.env
 
       - run:
-          name: Set Absolute Path for Backend Volume
+          name: Set Backend Path Environment Variable
           command: |
-            echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
+            export BACKEND_PATH=$(pwd)/backend && docker-compose up --build -d
 
       - run:
           name: Print BACKEND_PATH
