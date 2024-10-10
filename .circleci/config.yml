@@ -87,6 +87,10 @@ jobs:
             echo "RAILS_ENV=test" >> backend/.env
 
       - run:
+          name: Debug .env File
+          command: cat backend/.env
+
+      - run:
           name: Build Backend Image
           command: |
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
