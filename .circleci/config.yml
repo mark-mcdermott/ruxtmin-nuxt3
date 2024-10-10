@@ -105,6 +105,11 @@ jobs:
             echo "BACKEND_PATH=${BACKEND_PATH}"
 
       - run:
+          name: Verify Backend Directory
+          command: |
+            ls -la /home/circleci/project/backend
+
+      - run:
           name: Build Backend Image
           command: |
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
