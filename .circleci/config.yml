@@ -36,21 +36,15 @@ jobs:
             echo "RAILS_ENV=test" >> backend/.env
 
       - run:
-          name: Set Absolute Path for Backend Volume
+          name: Build Backend Image
           command: |
-            echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
-
-      - run:
-          name: Build and Run Backend Container with Explicit Path
-          command: |
-            source $BASH_ENV
-            docker-compose up --build -d
+            docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
 
       - run:
           name: Run RSpec Tests
           command: |
             cd backend
-            docker-compose run --rm rspec
+            docker-compose up --no-build --abort-on-container-exit rspec
 
       - store_test_results:
           path: backend/tmp/rspec_results
@@ -97,45 +91,48 @@ jobs:
             echo "RAILS_ENV=test" >> backend/.env
 
       - run:
+          name: Debug .env File
+          command: cat backend/.env
+
+      - run:
           name: Set Absolute Path for Backend Volume
           command: |
             echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
 
       - run:
+          name: Build Backend Image
+          command: |
+            docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
+
+      - run:
           name: Build and Run Backend Container with Explicit Path
           command: |
-            source $BASH_ENV
-            docker-compose up --build -d
+            BACKEND_PATH=$(pwd)/backend docker-compose up --build -d
 
       - run:
           name: Check Files in Backend Container
           command: |
-            source $BASH_ENV
             docker-compose run --rm backend ls -la /app/backend
 
       - run:
           name: Debug Backend Container Filesystem
           command: |
-            source $BASH_ENV
             docker-compose run --rm backend find /app -type d
 
       - run:
           name: Detailed Check Backend Container Filesystem
           command: |
-            source $BASH_ENV
             docker-compose run --rm backend ls -la /app/backend
 
       - run:
           name: Run Playwright Tests
           command: |
-            source $BASH_ENV
-            docker-compose up --build --abort-on-container-exit playwright
+            BACKEND_PATH=$(pwd)/backend docker-compose up --build --abort-on-container-exit playwright
           when: always
 
       - run:
           name: Inspect Backend Logs
-          command: |
-            docker logs project-backend-1
+          command: docker logs project-backend-1
           when: always
 
       - store_test_results:
