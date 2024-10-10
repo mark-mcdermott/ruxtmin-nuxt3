@@ -21,7 +21,7 @@ services:
       RAILS_ENV: ${RAILS_ENV:-development}
       DATABASE_URL: "postgres://postgres:${POSTGRES_PASSWORD}@db:5432/backend_${RAILS_ENV:-development}"
     volumes:
-      - "${BACKEND_PATH}:/app/backend:rw"
+      - "${BACKEND_PATH:-./backend}:/app/backend:rw"
     working_dir: /app/backend  # Align with WORKDIR in Dockerfile
     ports:
       - '3000:3000'
