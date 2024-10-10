@@ -115,6 +115,11 @@ jobs:
             docker-compose run --rm backend find /app -type d
 
       - run:
+          name: Detailed Check Backend Container Filesystem
+          command: |
+            docker-compose run --rm backend ls -la /app/backend
+
+      - run:
           name: Run Playwright Tests
           command: |
             docker-compose up --build --abort-on-container-exit playwright
