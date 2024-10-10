@@ -110,6 +110,11 @@ jobs:
             docker-compose build
 
       - run:
+          name: Debug Backend Container Filesystem
+          command: |
+            docker-compose run --rm backend find /app -type d
+
+      - run:
           name: Run Playwright Tests
           command: |
             docker-compose up --build --abort-on-container-exit playwright
