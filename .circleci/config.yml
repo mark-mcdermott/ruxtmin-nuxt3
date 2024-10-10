@@ -112,7 +112,7 @@ jobs:
       - run:
           name: Run Playwright Tests
           command: |
-            docker-compose run --rm playwright
+            docker-compose up --build --abort-on-container-exit playwright
           when: always
 
       - run:
