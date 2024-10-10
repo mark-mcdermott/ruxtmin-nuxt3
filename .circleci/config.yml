@@ -100,6 +100,11 @@ jobs:
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
 
       - run:
+          name: Check Files in Backend Container
+          command: |
+            docker-compose run --rm backend ls -la /app/backend
+
+      - run:
           name: Build Other Docker Images
           command: |
             docker-compose build
