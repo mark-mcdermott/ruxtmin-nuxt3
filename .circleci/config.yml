@@ -100,6 +100,11 @@ jobs:
             echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
 
       - run:
+          name: Print BACKEND_PATH
+          command: |
+            echo "BACKEND_PATH=${BACKEND_PATH}"
+
+      - run:
           name: Build Backend Image
           command: |
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend

@@ -1,5 +1,7 @@
 FROM ruby:3.2.2
 
+RUN useradd -m circleci
+
 WORKDIR /app/backend
 
 # Copy Gemfile and Gemfile.lock first to leverage Docker layer caching
