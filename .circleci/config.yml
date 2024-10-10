@@ -95,9 +95,9 @@ jobs:
           command: cat backend/.env
 
       - run:
-          name: Build and Run Backend Container with Explicit Path
+          name: Set Absolute Path for Backend Volume
           command: |
-            BACKEND_PATH=$(pwd)/backend docker-compose up --build -d
+            echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
 
       - run:
           name: Build Backend Image
@@ -105,14 +105,14 @@ jobs:
             docker build --no-cache -t backend_image -f backend/Dockerfile.backend backend
 
       - run:
+          name: Build and Run Backend Container with Explicit Path
+          command: |
+            BACKEND_PATH=$(pwd)/backend docker-compose up --build -d
+
+      - run:
           name: Check Files in Backend Container
           command: |
             docker-compose run --rm backend ls -la /app/backend
-
-      - run:
-          name: Build Other Docker Images
-          command: |
-            docker-compose build
 
       - run:
           name: Debug Backend Container Filesystem
@@ -127,7 +127,7 @@ jobs:
       - run:
           name: Run Playwright Tests
           command: |
-            docker-compose up --build --abort-on-container-exit playwright
+            BACKEND_PATH=$(pwd)/backend docker-compose up --build --abort-on-container-exit playwright
           when: always
 
       - run:
