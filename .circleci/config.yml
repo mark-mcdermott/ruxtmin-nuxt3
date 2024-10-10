@@ -121,7 +121,7 @@ jobs:
       - run:
           name: Build and Run Backend Container with Explicit Path
           command: |
-            BACKEND_PATH=$(pwd)/backend docker-compose up --build -d
+            source $BASH_ENV && docker-compose up --build -d
 
       - run:
           name: Check Files in Backend Container
