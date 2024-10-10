@@ -13,4 +13,4 @@ USER circleci
 RUN bundle install
 
 # Copy the rest of your application code
-COPY --chown=circleci:circleci . .
+COPY --chown=circleci:circleci . . 
