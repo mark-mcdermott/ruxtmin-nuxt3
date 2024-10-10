@@ -96,7 +96,8 @@ jobs:
 
       - run:
           name: Set Absolute Path for Backend Volume
-          command: echo "BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
+          command: |
+            echo "export BACKEND_PATH=$(pwd)/backend" >> $BASH_ENV
 
       - run:
           name: Build Backend Image
