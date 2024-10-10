@@ -60,6 +60,10 @@ jobs:
     steps:
       - checkout
 
+      - run:
+        name: List Backend Files
+        command: ls -la backend
+
       - setup_remote_docker
 
       - run:
