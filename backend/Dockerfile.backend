@@ -1,16 +1,14 @@
-FROM cimg/ruby:3.2.2-node
+FROM ruby:3.2.2
 
-# Set working directory
 WORKDIR /app/backend
 
-# Copy Gemfile and Gemfile.lock
-COPY --chown=circleci:circleci Gemfile Gemfile.lock ./
+# Copy Gemfile and Gemfile.lock first to leverage Docker layer caching
+COPY Gemfile Gemfile.lock ./
 
-# Switch to circleci user (already the default)
-USER circleci
-
-# Install dependencies as circleci user
+# Install dependencies
 RUN bundle install
 
-# Copy the rest of your application code
-COPY --chown=circleci:circleci . . 
+# Copy the rest of the application code
+COPY . .
+
+CMD ["bash"]
