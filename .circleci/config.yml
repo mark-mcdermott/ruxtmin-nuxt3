@@ -68,6 +68,9 @@ jobs:
           name: Remove Existing Containers (if any)
           command: docker-compose down -v
       - run:
+          name: Debug Backend Logs
+          command: docker logs project-backend-1 || echo "No logs available"
+      - run:
           name: Run RSpec Tests
           command: |
             cd backend
