@@ -1,20 +1,54 @@
 {
   "name": "nuxt-app",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix",
+    "vitest": "npx vitest",
+    "component-tests": "npx vitest run spec/components/*",
+    "playwright": "npx playwright test",
+    "wait-then-playwright": "./wait-for-rails.sh && npx playwright test",
+    "rails-server": "cd ../backend && rails server",
+    "front-and-back-dev": "concurrently -n 'BACKEND,FRONTEND' -c 'green,yellow' 'npm:rails-server' 'npm:dev'",
+    "e2e-tests": "concurrently -n 'RAILS_SERVER,NUXT_SERVER,PLAYWRIGHT' -c 'blue,green,yellow' 'npm:rails-server' 'npm:dev' 'npm:wait-then-playwright'"
   },
   "dependencies": {
+    "@nuxt/fonts": "^0.10.2",
+    "@playwright/test": "^1.49.0",
     "nuxt": "^3.14.1592",
+    "pixelmatch": "^6.0.0",
+    "playwright-expect": "^0.1.2",
+    "radix-vue": "^1.9.10",
+    "tailwind-variants": "^0.3.0",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.9"
+    "@antfu/eslint-config": "^3.9.2",
+    "@flydotio/dockerfile": "^0.5.9",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+    "@iconify-json/lucide": "^1.2.15",
+    "@nuxt/icon": "^1.8.1",
+    "@nuxt/test-utils": "^3.14.4",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@tailwindcss/forms": "^0.5.9",
+    "@vue/test-utils": "^2.4.6",
+    "@vueuse/nuxt": "^11.2.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.15.0",
+    "happy-dom": "^15.11.6",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5",
+    "wait-on": "^8.0.1"
   }
 }
