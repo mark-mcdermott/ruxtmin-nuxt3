@@ -119,6 +119,10 @@ jobs:
       - ensure_permissions
 
       - run:
+          name: Debug Backend Build Logs
+          command: docker-compose build backend || echo "Backend build failed"
+
+      - run:
           name: Adjust Backend Folder Permissions on Host
           command: sudo chmod -R 777 /home/circleci/project/backend
 
@@ -132,10 +136,6 @@ jobs:
           name: Check CI and DOCKER_ENV Values
           command: |
             echo "CI=$CI, DOCKER_ENV=$DOCKER_ENV"
-
-      - run:
-          name: Debug Backend Logs
-          command: docker logs project-backend-1 || echo "No logs available"
 
       - run:
           name: Run Backend and Frontend Services
