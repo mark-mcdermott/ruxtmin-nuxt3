@@ -68,9 +68,6 @@ jobs:
           name: Remove Existing Containers (if any)
           command: docker-compose down -v
       - run:
-          name: Debug Backend Logs
-          command: docker logs project-backend-1 || echo "No logs available"
-      - run:
           name: Run RSpec Tests
           command: |
             cd backend
@@ -135,6 +132,10 @@ jobs:
           name: Check CI and DOCKER_ENV Values
           command: |
             echo "CI=$CI, DOCKER_ENV=$DOCKER_ENV"
+
+      - run:
+          name: Debug Backend Logs
+          command: docker logs project-backend-1 || echo "No logs available"
 
       - run:
           name: Run Backend and Frontend Services
