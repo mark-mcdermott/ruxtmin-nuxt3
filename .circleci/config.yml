@@ -143,6 +143,10 @@ jobs:
             docker-compose up -d db backend frontend
 
       - run:
+          name: Inspect Backend Container Runtime Logs
+          command: docker-compose logs backend || echo "No runtime logs available"
+
+      - run:
           name: Wait for Backend to be Ready
           command: |
             ./backend/wait-for-it.sh localhost:3000 -t 60 -- echo "Backend is ready"
