@@ -145,6 +145,7 @@ jobs:
       - run:
           name: Inspect Backend Container Runtime Logs
           command: docker-compose logs backend || echo "No runtime logs available"
+          when: always
 
       - run:
           name: Wait for Backend to be Ready
@@ -155,7 +156,6 @@ jobs:
           name: Run Playwright Tests
           command: |
             docker-compose up --abort-on-container-exit playwright
-          when: always
 
       - store_artifacts:
           path: frontend/spec/e2e/screenshots/baseline/ci
