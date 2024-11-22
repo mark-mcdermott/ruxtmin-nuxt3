@@ -166,6 +166,10 @@ jobs:
           name: Debug Frontend Response
           command: curl -v http://localhost:3001 > frontend_response.html
 
+      - store_artifacts:
+          path: artifacts
+          destination: debug-files
+
       - run:
           name: Run Playwright Tests
           command: |
