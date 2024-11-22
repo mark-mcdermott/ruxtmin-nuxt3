@@ -23,6 +23,7 @@ commands:
           command: |
             echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > backend/.env
             echo "RAILS_ENV=test" >> backend/.env
+            echo "SECRET_KEY_BASE=${SECRET_KEY_BASE}" >> backend/.env
       - run:
           name: Display .env for Verification
           command: cat backend/.env
@@ -108,6 +109,15 @@ jobs:
               echo "POSTGRES_PASSWORD is set."
             fi
 
+      - run:
+          name: Debug CircleCI Environment Variables
+          command: |
+            echo "SECRET_KEY_BASE=${SECRET_KEY_BASE}"
+            if [ -z "${SECRET_KEY_BASE}" ]; then
+              echo "Error: SECRET_KEY_BASE is not set in CircleCI."
+              exit 1
+            fi
+
       - create_env_file
       - build_backend_image
 
@@ -136,11 +146,6 @@ jobs:
           name: Check CI and DOCKER_ENV Values
           command: |
             echo "CI=$CI, DOCKER_ENV=$DOCKER_ENV"
-
-      - run:
-          name: Debug SECRET_KEY_BASE Inside Backend
-          command: docker-compose run --rm backend bash -c 'echo "SECRET_KEY_BASE=${SECRET_KEY_BASE}" || echo "No SECRET_KEY_BASE available"'
-
 
       - run:
           name: Run Backend and Frontend Services

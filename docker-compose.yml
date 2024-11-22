@@ -16,6 +16,8 @@ services:
       retries: 10
 
   backend:
+    env_file:
+      - ./backend/.env
     user: "${DOCKER_USER:-circleci}"
     build:
       context: ./backend
@@ -36,10 +38,12 @@ services:
         condition: service_healthy
     command: >
       bash -c '
+        echo "SECRET_KEY_BASE in backend is: $SECRET_KEY_BASE" &&
         rm -f /app/backend/tmp/pids/server.pid &&
         bundle exec rails db:prepare &&
         bundle exec rails s -b 0.0.0.0 -p 3000
       '
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
       interval: 10s
