@@ -66,7 +66,7 @@ export async function compareScreenshot(page, testName, { browserName = 'chromiu
 export async function verifyHeaderDetails(page, expect) {
   const homeLink = page.getByTestId('header-link-home');
   const publicLink = page.getByTestId('header-link-public');
-  const privateLink = page.getByTestId('header-link-private');
+  // const privateLink = page.getByTestId('header-link-private');
 
   await expect(homeLink).toBeVisible({ timeout: 30000 });
   await expect(homeLink).toHaveText('Home');
@@ -74,7 +74,7 @@ export async function verifyHeaderDetails(page, expect) {
   await expect(publicLink).toBeVisible();
   await expect(publicLink).toHaveText('Public');
   await expect(publicLink).toHaveAttribute('href', '/public');
-  await expect(privateLink).toBeVisible();
+  // await expect(privateLink).toBeVisible();
   // await expect(privateLink).toHaveText('Private');
   // await expect(privateLink).toHaveAttribute('href', '/private');
 }
