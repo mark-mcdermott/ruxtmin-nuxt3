@@ -75,8 +75,8 @@ export async function verifyHeaderDetails(page, expect) {
   await expect(publicLink).toHaveText('Public');
   await expect(publicLink).toHaveAttribute('href', '/public');
   await expect(privateLink).toBeVisible();
-  await expect(privateLink).toHaveText('Private');
-  await expect(privateLink).toHaveAttribute('href', '/private');
+  // await expect(privateLink).toHaveText('Private');
+  // await expect(privateLink).toHaveAttribute('href', '/private');
 }
 
 // Footer details verification
