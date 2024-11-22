@@ -163,6 +163,10 @@ jobs:
             ./backend/wait-for-it.sh localhost:3000 -t 60 -- echo "Backend is ready"
 
       - run:
+          name: Debug Frontend Response
+          command: curl -v http://localhost:3001 > frontend_response.html
+
+      - run:
           name: Run Playwright Tests
           command: |
             docker-compose up --abort-on-container-exit playwright
