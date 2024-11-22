@@ -138,6 +138,11 @@ jobs:
             echo "CI=$CI, DOCKER_ENV=$DOCKER_ENV"
 
       - run:
+          name: Debug SECRET_KEY_BASE Inside Backend
+          command: docker-compose run --rm backend bash -c 'echo "SECRET_KEY_BASE=${SECRET_KEY_BASE}" || echo "No SECRET_KEY_BASE available"'
+
+
+      - run:
           name: Run Backend and Frontend Services
           command: |
             docker-compose up -d db backend frontend
