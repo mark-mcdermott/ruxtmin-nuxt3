@@ -164,7 +164,9 @@ jobs:
 
       - run:
           name: Debug Frontend Response
-          command: curl -v http://localhost:3001 > frontend_response.html
+          command: |
+            mkdir -p artifacts
+            curl -v http://localhost:3001 > artifacts/frontend_response.html
 
       - store_artifacts:
           path: artifacts
